@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Load dashboard data
 async function loadDashboardData() {
   try {
-    const response = await fetch('http://localhost:3001/api/bookings');
+    const response = await fetch('/api/bookings');
     if (response.ok) {
       allBookings = await response.json();
       filteredBookings = [...allBookings];
@@ -449,7 +449,7 @@ async function cancelBooking(bookingId, bookingDate, hallName, customerName) {
   if (!confirmCancel) return;
 
   try {
-    const res = await fetch(`http://localhost:3001/api/bookings/${bookingId}`, {
+    const res = await fetch(`/api/bookings/${bookingId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'cancelled' })
