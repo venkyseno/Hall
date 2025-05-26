@@ -15,7 +15,7 @@ let bookedDates = []; // Store booked dates
 // --- Database Functions ---
 async function fetchBookingsForService(serviceName) {
   try {
-    const response = await fetch(`http://localhost:3001/api/bookings/${encodeURIComponent(serviceName)}`);
+    const response = await fetch(`/api/bookings/${encodeURIComponent(serviceName)}`);
     if (response.ok) {
       const bookings = await response.json();
       console.log(`📊 Loaded ${bookings.length} bookings for ${serviceName}`);
@@ -32,7 +32,7 @@ async function fetchBookingsForService(serviceName) {
 
 async function saveBookingToDatabase(bookingData) {
   try {
-    const response = await fetch('http://localhost:3001/api/bookings', {
+    const response = await fetch('/api/bookings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
