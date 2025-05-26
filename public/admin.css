@@ -207,13 +207,8 @@
 /* Enhanced Table */
 .table-container {
   overflow-x: auto;
-  width: 100%;
-}
-
-table {
-  width: 100%;
-  min-width: 600px;
-  border-collapse: collapse;
+  max-height: 600px;
+  overflow-y: auto;
 }
 
 .admin-table {
@@ -251,35 +246,6 @@ table {
 
 .admin-table tr:nth-child(even) {
   background: rgba(248, 249, 250, 0.5);
-}
-
-@media (max-width: 600px) {
-  table, thead, tbody, th, td, tr {
-    display: block;
-  }
-  thead tr {
-    display: none;
-  }
-  tr {
-    margin-bottom: 15px;
-    border-bottom: 2px solid #eee;
-  }
-  td {
-    position: relative;
-    padding-left: 50%;
-    min-height: 40px;
-    border: none;
-    border-bottom: 1px solid #eee;
-  }
-  td:before {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    width: 45%;
-    white-space: nowrap;
-    font-weight: bold;
-    content: attr(data-label);
-  }
 }
 
 /* Status badges */
@@ -366,19 +332,6 @@ table {
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: modalSlideIn 0.3s ease-out;
-}
-
-#editModal > div, .modal-content {
-  width: 400px;
-  max-width: 95vw;
-}
-
-@media (max-width: 600px) {
-  #editModal > div, .modal-content {
-    width: 98vw;
-    padding: 10px;
-    border-radius: 0;
-  }
 }
 
 .tally-modal {
@@ -917,44 +870,6 @@ table {
   font-size: 14px;
 }
 
-/* Header styles */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: #fff;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-
-/* Add top padding to body or main content equal to header height */
-body, .main-content {
-  padding-top: 70px; /* Adjust to your header height */
-}
-
-/* Responsive header buttons */
-.header .nav, .header .actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-@media (max-width: 600px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px 5px;
-  }
-  .header .nav, .header .actions {
-    flex-direction: column;
-    width: 100%;
-    gap: 6px;
-  }
-  body, .main-content {
-    padding-top: 60px; /* Adjust for mobile header height */
-  }
-}
-
 /* Responsive Design */
 @media (max-width: 1200px) {
   .calendars-grid {
@@ -1039,19 +954,4 @@ body, .main-content {
   background: linear-gradient(135deg, #b2f7ef 0%, #f7cac9 100%) !important;
   color: #2c3e50 !important;
   border: 2px solid #2c3e50 !important;
-}
-
-button, input, select {
-  font-size: 1em;
-  padding: 10px 14px;
-  border-radius: 6px;
-  width: auto;
-  max-width: 100%;
-}
-
-@media (max-width: 600px) {
-  button, input, select {
-    width: 100%;
-    margin-bottom: 8px;
-  }
 }
