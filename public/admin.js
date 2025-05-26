@@ -475,7 +475,7 @@ async function deleteBooking(bookingId, bookingDate, hallName, customerName) {
   if (!confirmDelete) return;
 
   try {
-    const res = await fetch(`http://localhost:3001/api/bookings/${bookingId}`, {
+    const res = await fetch(`/api/bookings/${bookingId}`, {
       method: 'DELETE'
     });
 
