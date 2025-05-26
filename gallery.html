@@ -1,0 +1,54 @@
+<head><link rel="stylesheet" href="styles.css"></head>
+
+<div class="gallery-page">
+  <h2>Gallery Manager</h2>
+  
+  <div class="gallery-upload">
+    <input type="file" id="imageUpload" accept="image/*">
+    <select id="imageType">
+      <option value="banner">Banner Image</option>
+      <option value="gallery">Gallery Image</option>
+    </select>
+    <button id="uploadBtn">Upload</button>
+  </div>
+  
+  <div class="gallery-images">
+    <h3>Banner Images</h3>
+    <div id="bannerImages" class="image-grid"></div>
+    
+    <h3>Gallery Images</h3>
+    <div id="galleryImages" class="image-grid"></div>
+  </div>
+</div>
+
+<section id="gallery" class="event-gallery">
+  <h2 class="gallery-title">Event Gallery</h2>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img src="images/event1.jpg" alt="Event 1">
+      <p>Wedding Ceremony</p>
+    </div>
+    <div class="gallery-item">
+      <img src="images/event2.jpg" alt="Event 2">
+      <p>Corporate Event</p>
+    </div>
+    <div class="gallery-item">
+      <img src="images/event3.jpg" alt="Event 3">
+      <p>Birthday Celebration</p>
+    </div>
+    <div class="gallery-item">
+      <img src="images/event4.jpg" alt="Event 4">
+      <p>Anniversary Party</p>
+    </div>
+    <div class="gallery-item">
+      <img src="images/event5.jpg" alt="Event 5">
+      <p>Product Launch</p>
+    </div>
+    <div class="gallery-item">
+      <img src="images/event6.jpg" alt="Event 6">
+      <p>Engagement Ceremony</p>
+    </div>
+  </div>
+</section>
+
+<script src="gallery.js"></script>

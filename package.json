@@ -1,0 +1,29 @@
+{
+  "name": "hall-booking-system",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "reset-db": "node scripts/resetDB.js",
+    "backup": "node scripts/backup.js",
+    "test": "node scripts/testEndpoints.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.16.0",
+    "sqlite3": "^5.1.7",
+    "twilio": "^5.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

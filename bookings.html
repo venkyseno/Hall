@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="admin-container">
+    <h1>Admin Dashboard</h1>
+    
+    <div class="calendar-container">
+      <h2>Service 1 Calendar</h2>
+      <div class="calendar">
+        <div class="calendar-header">
+          <button type="button" id="prevMonth" class="calendar-nav">&lt;</button>
+          <select id="monthSelect"></select>
+          <select id="yearSelect"></select>
+          <button type="button" id="nextMonth" class="calendar-nav">&gt;</button>
+        </div>
+        <table>
+          <thead>
+            <!-- days of week -->
+          </thead>
+          <tbody>
+            <!-- calendar days will be rendered here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="booking-details">
+      <h3>Booking Details</h3>
+      <p>Click on a booked date to view details</p>
+    </div>
+
+    <form id="booking-form">
+      <!-- Booking form content will go here -->
+    </form>
+
+    <div id="calendarModal" style="display:none;">
+      <!-- calendar and form here -->
+    </div>
+
+    <div class="service-card">
+      <button class="book-now">Book Now</button>
+    </div>
+
+    <div id="bookingModal" style="display:none;">
+      <div class="modal-content">
+        <span id="closeModal">X</span>
+        <h2 id="modalServiceName"></h2>
+        <form id="userDetailsForm" style="display:none;">
+          <!-- form fields here -->
+        </form>
+        <div id="calendarContainer"></div>
+        <button id="calendarOkBtn" style="display:none;">OK</button>
+      </div>
+    </div>
+
+    <button id="prevMonth">Prev</button>
+    <button id="nextMonth">Next</button>
+    <button id="confirmBooking">Confirm Booking</button>
+  </div>
+</body>
+</html>

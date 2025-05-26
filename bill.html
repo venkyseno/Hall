@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bill Calculation - Royal Banquet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+  <style>
+    .bill-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+      padding: 32px 24px;
+    }
+    .bill-container h2 {
+      margin-bottom: 18px;
+      color: #b8860b;
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .bill-form label {
+      display: block;
+      margin: 12px 0 4px 0;
+      font-weight: 500;
+    }
+    .bill-form input[type="text"],
+    .bill-form input[type="number"],
+    .bill-form select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    .bill-form button {
+      background: #d4a017;
+      color: #fff;
+      border: none;
+      border-radius: 22px;
+      padding: 10px 28px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(218,165,32,0.08);
+    }
+    .bill-form button:hover {
+      background: #b8860b;
+    }
+    .bill-result {
+      margin-top: 24px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 18px 14px;
+      font-size: 1.1rem;
+      color: #222;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.03);
+      position: relative;
+    }
+    .bill-result strong {
+      color: #b8860b;
+      font-size: 1.2em;
+    }
+    .print-btn {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 22px;
+      padding: 10px 28px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 8px rgba(0,123,255,0.08);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .print-btn:hover {
+      background: #0056b3;
+    }
+    @media (max-width: 700px) {
+      .bill-container {
+        padding: 14px 4vw;
+      }
+    }
+    @media print {
+      body * { visibility: hidden; }
+      .bill-result, .bill-result * { visibility: visible; }
+      .bill-result {
+        position: absolute;
+        left: 0; top: 0;
+        width: 100vw;
+        min-height: 100vh;
+        background: #fff;
+        box-shadow: none;
+        font-family: 'Times New Roman', Times, serif !important;
+        color: #222;
+        padding: 32px 24px !important;
+        border: 2px solid #222;
+      }
+      .print-btn { display: none !important; }
+    }
+    .bill-result {
+      font-family: 'Times New Roman', Times, serif;
+      border: 2px solid #222;
+      margin-top: 32px;
+      padding: 32px 24px;
+      background: #fff;
+      min-height: 500px;
+    }
+    .bill-memo-header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .bill-memo-header .memo-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+    .bill-memo-header .company-name {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+    .bill-memo-header .address {
+      font-size: 1em;
+      margin-bottom: 2px;
+    }
+    .bill-memo-header .bill-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1em;
+      margin-top: 8px;
+      margin-bottom: 18px;
+    }
+    .bill-memo-section {
+      margin-bottom: 18px;
+      font-size: 1.1em;
+    }
+    .bill-memo-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+    }
+    .bill-memo-table th, .bill-memo-table td {
+      border: 1px solid #222;
+      padding: 8px 6px;
+      text-align: left;
+      font-size: 1em;
+    }
+    .bill-memo-table th {
+      background: #f5f5f5;
+      font-weight: bold;
+    }
+    .bill-memo-total {
+      text-align: right;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-top: 12px;
+      margin-bottom: 24px;
+    }
+    .bill-memo-sign {
+      margin-top: 48px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .bill-memo-sign-box {
+      text-align: center;
+      min-width: 220px;
+    }
+    .bill-memo-sign-box .sign-line {
+      border-bottom: 1px solid #222;
+      margin-bottom: 4px;
+      margin-top: 32px;
+      height: 32px;
+    }
+    .bill-memo-sign-box .sign-label {
+      font-size: 1em;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-dashboard">
+    <div class="top-bar">
+      <h1>Bill Calculation</h1>
+      <a href="index.html" class="logout-btn">Logout</a>
+    </div>
+    <div class="menu">
+      <a href="admin.html">Dashboard</a>
+      <a href="bookings.html">Bookings</a>
+      <a href="bill.html">Bill Calculation</a>
+      <a href="gallery.html">Gallery Manager</a>
+    </div>
+    <div class="bill-container">
+      <h2>🧮 Tally Calculator</h2>
+      <form class="bill-form" id="billForm" autocomplete="off">
+        <label for="tallyType">Tally Type</label>
+        <select id="tallyType" name="tallyType">
+          <option value="1">Tally Type 1 (Advance + Remaining + Lights)</option>
+          <option value="2">Tally Type 2 (Hall Price + 20% Decoration + Lights)</option>
+        </select>
+        <label for="customerSelect">Customer</label>
+        <select id="customerSelect">
+          <option value="">-- Select Existing --</option>
+        </select>
+        <label for="customerName">Or New Customer Name</label>
+        <input type="text" id="customerName" name="customerName" placeholder="Enter new name">
+        <label for="customerNumber">Or New Customer Number</label>
+        <input type="text" id="customerNumber" name="customerNumber" placeholder="Enter new number">
+        <div id="type1Fields">
+          <label for="advance">Advance Amount</label>
+          <input type="number" id="advance" name="advance" min="0" step="any">
+          <label for="remaining">Remaining Amount</label>
+          <input type="number" id="remaining" name="remaining" min="0" step="any">
+          <label for="lights1">Lights Cost</label>
+          <input type="number" id="lights1" name="lights1" min="0" step="any">
+        </div>
+        <div id="type2Fields" style="display:none;">
+          <label for="hallPrice">Total Hall Price</label>
+          <input type="number" id="hallPrice" name="hallPrice" min="0" step="any">
+          <label for="decoration">Decoration Cost</label>
+          <input type="number" id="decoration" name="decoration" min="0" step="any">
+          <label for="lights2">Lights Cost</label>
+          <input type="number" id="lights2" name="lights2" min="0" step="any">
+        </div>
+        <button type="submit">Calculate</button>
+      </form>
+      <div class="bill-result" id="billResult" style="display:none;"></div>
+      <button class="print-btn" id="printBtn" style="display:none;">Print Bill</button>
+    </div>
+  </div>
+  <script>
+    // Example customer data (could be loaded from storage)
+    const customers = [
+      { name: "John Doe", number: "9876543210" },
+      { name: "Jane Smith", number: "9123456780" },
+      { name: "Alice", number: "9000000001" }
+    ];
+    const banquetHall = {
+      name: "Royal Banquet Hall",
+      address: "123 Main Road, City, State, 123456"
+    };
+    const serviceName = "Royal Banquet Services";
+
+    // Populate customer dropdown
+    const customerSelect = document.getElementById('customerSelect');
+    customers.forEach((c, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = c.name + " (" + c.number + ")";
+      customerSelect.appendChild(opt);
+    });
+
+    // On customer select, fill name/number fields
+    customerSelect.addEventListener('change', function() {
+      if (this.value) {
+        const c = customers[this.value];
+        document.getElementById('customerName').value = c.name;
+        document.getElementById('customerNumber').value = c.number;
+      } else {
+        document.getElementById('customerName').value = "";
+        document.getElementById('customerNumber').value = "";
+      }
+    });
+
+    // Toggle fields based on tally type
+    document.getElementById('tallyType').addEventListener('change', function() {
+      if (this.value === "1") {
+        document.getElementById('type1Fields').style.display = '';
+        document.getElementById('type2Fields').style.display = 'none';
+      } else {
+        document.getElementById('type1Fields').style.display = 'none';
+        document.getElementById('type2Fields').style.display = '';
+      }
+      document.getElementById('billResult').style.display = 'none';
+      document.getElementById('printBtn').style.display = 'none';
+    });
+
+    document.getElementById('billForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const type = document.getElementById('tallyType').value;
+      let name = document.getElementById('customerName').value.trim();
+      let number = document.getElementById('customerNumber').value.trim();
+      // If selected from dropdown, use those values
+      if (customerSelect.value && (!name || !number)) {
+        const c = customers[customerSelect.value];
+        name = c.name;
+        number = c.number;
+      }
+      if (!name || !number) {
+        alert("Please select or enter customer name and number.");
+        return;
+      }
+      let resultHtml = `
+        <div style="text-align:center;">
+          <div style="font-size:1.2em;font-weight:bold;">${serviceName}</div>
+          <div style="font-size:1.1em;">${banquetHall.name}</div>
+          <div style="font-size:0.98em;">${banquetHall.address}</div>
+        </div>
+        <hr>
+        <div>Customer: <strong>${name}</strong><br>Number: <strong>${number}</strong></div>
+        <hr>
+      `;
+      if (type === "1") {
+        const advance = parseFloat(document.getElementById('advance').value) || 0;
+        const remaining = parseFloat(document.getElementById('remaining').value) || 0;
+        const lights = parseFloat(document.getElementById('lights1').value) || 0;
+        const total = advance + remaining + lights;
+        resultHtml += `
+          <div>Advance: ₹${advance.toFixed(2)}</div>
+          <div>Remaining: ₹${remaining.toFixed(2)}</div>
+          <div>Lights Cost: ₹${lights.toFixed(2)}</div>
+          <hr>
+          <div><strong>Total: ₹${total.toFixed(2)}</strong></div>
+        `;
+      } else {
+        const hall = parseFloat(document.getElementById('hallPrice').value) || 0;
+        const deco = parseFloat(document.getElementById('decoration').value) || 0;
+        const lights = parseFloat(document.getElementById('lights2').value) || 0;
+        const deco20 = deco * 0.2;
+        const total = hall + deco20 + lights;
+        resultHtml += `
+          <div>Hall Price: ₹${hall.toFixed(2)}</div>
+          <div>Decoration (20%): ₹${deco20.toFixed(2)} (from ₹${deco.toFixed(2)})</div>
+          <div>Lights Cost: ₹${lights.toFixed(2)}</div>
+          <hr>
+          <div><strong>Grand Total: ₹${total.toFixed(2)}</strong></div>
+        `;
+      }
+      resultHtml += `
+        <br><br>
+        <div style="margin-top:40px;">
+          <div style="float:right; text-align:center;">
+            <div>__________________________</div>
+            <div style="font-size:0.95em;">Signature</div>
+          </div>
+        </div>
+      `;
+      const resultDiv = document.getElementById('billResult');
+      resultDiv.innerHTML = resultHtml;
+      resultDiv.style.display = '';
+      document.getElementById('printBtn').style.display = '';
+    });
+
+    // Print feature
+    document.getElementById('printBtn').addEventListener('click', function() {
+      window.print();
+    });
+  </script>
+</body>
+</html>

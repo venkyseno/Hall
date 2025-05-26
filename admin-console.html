@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Hall Booking System</title>
+  <link rel="stylesheet" href="admin.css">
+  <link rel="icon" href="images/logo.png" type="image/png">
+</head>
+<body class="admin-page">
+  <header>
+    <div class="navbar">
+      <div class="logo-title-combo">
+        <img src="images/logo.png" alt="Logo" class="title-logo">
+        <div class="header-title">
+          <span class="main-title">Admin Dashboard</span>
+          <span class="sub-title">Hall Management System</span>
+        </div>
+      </div>
+      <nav>
+        <a href="index.html" class="nav-link">← Back to Home</a>
+      </nav>
+      <button id="logoutBtn" class="book-header">Logout</button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    <!-- Dashboard Stats -->
+    <section class="dashboard-stats">
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-content">
+          <h3 id="upcomingCount">0</h3>
+          <p>Upcoming Events</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-content">
+          <h3 id="totalRevenue">₹0</h3>
+          <p>Total Revenue</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-content">
+          <h3 id="todayBookings">0</h3>
+          <p>Today's Bookings</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏛️</div>
+        <div class="stat-content">
+          <h3 id="availableHalls">2</h3>
+          <p>Available Halls</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+      <button class="action-btn" onclick="openTallyModal()">
+        <span class="btn-icon">🧮</span>
+        Tally Calculation
+      </button>
+      <button class="action-btn" onclick="printAllBookings()">
+        <span class="btn-icon">🖨️</span>
+        Print Report
+      </button>
+      <button class="action-btn" onclick="exportToCSV()">
+        <span class="btn-icon">📊</span>
+        Export CSV
+      </button>
+      <button class="action-btn" onclick="refreshData()">
+        <span class="btn-icon">🔄</span>
+        Refresh Data
+      </button>
+    </section>
+    
+    <!-- Hall Calendars and Upcoming Bookings -->
+    <section class="hall-calendars-section">
+      <div class="calendars-grid">
+        <!-- Maha Lingeshwara Calendar -->
+        <div class="calendar-card">
+          <div class="calendar-header">
+            <h3>🏛️ Maha Lingeshwara Hall</h3>
+            <div class="calendar-navigation">
+              <button id="prevMonth1" class="nav-btn">←</button>
+              <select id="monthSelect1" class="month-select"></select>
+              <select id="yearSelect1" class="year-select"></select>
+              <button id="nextMonth1" class="nav-btn">→</button>
+            </div>
+          </div>
+          <div class="calendar-container">
+            <table class="hall-calendar">
+              <thead>
+                <tr>
+                  <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th>
+                  <th>Thu</th><th>Fri</th><th>Sat</th>
+                </tr>
+              </thead>
+              <tbody id="calendarBody1"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Maha Nandeshwara Calendar -->
+        <div class="calendar-card">
+          <div class="calendar-header">
+            <h3>🏛️ Maha Nandeshwara Hall</h3>
+            <div class="calendar-navigation">
+              <button id="prevMonth2" class="nav-btn">←</button>
+              <select id="monthSelect2" class="month-select"></select>
+              <select id="yearSelect2" class="year-select"></select>
+              <button id="nextMonth2" class="nav-btn">→</button>
+            </div>
+          </div>
+          <div class="calendar-container">
+            <table class="hall-calendar">
+              <thead>
+                <tr>
+                  <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th>
+                  <th>Thu</th><th>Fri</th><th>Sat</th>
+                </tr>
+              </thead>
+              <tbody id="calendarBody2"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Bookings -->
+      <div class="upcoming-bookings-card">
+        <div class="upcoming-header">
+          <h3>📅 Upcoming Bookings</h3>
+          <span id="upcomingCount" class="upcoming-count">0</span>
+        </div>
+        <div class="upcoming-list-container">
+          <ul id="upcomingBookingsList" class="upcoming-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter Controls -->
+
+    <section class="filter-controls">
+      <div class="filter-group">
+        <label for="hallFilter">Filter by Hall:</label>
+        <select id="hallFilter">
+          <option value="all">All Halls</option>
+          <option value="Maha Lingeshwara">Maha Lingeshwara</option>
+          <option value="Maha Nandeshwara">Maha Nandeshwara</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="statusFilter">Filter by Status:</label>
+        <select id="statusFilter">
+          <option value="all">All Status</option>
+          <option value="booked">Booked</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="dateFilter">Filter by Date:</label>
+        <input type="date" id="dateFilter">
+      </div>
+    </section>
+
+    <!-- All Bookings Table (moved to bottom) -->
+    <section class="bookings-section">
+      <div class="section-header">
+        <h2>All Bookings Management</h2>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search by name, mobile, or hall...">
+          <span class="search-icon">🔍</span>
+        </div>
+      </div>
+      
+      <div class="table-container">
+        <table id="allBookingsTable" class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Hall</th>
+              <th>Customer Name</th>
+              <th>Mobile</th>
+              <th>Date</th>
+              <th>Advance</th>
+              <th>Status</th>
+              <th>Booked On</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Tally Calculation Modal -->
+  <div id="tallyModal" class="modal">
+    <div class="modal-content tally-modal">
+      <div class="modal-header">
+        <h2>💰 Tally Calculation</h2>
+        <span class="modal-close" onclick="closeTallyModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="tally-filters">
+          <div class="filter-row">
+            <div class="filter-item">
+              <label for="tallyHall">Select Hall:</label>
+              <select id="tallyHall">
+                <option value="all">All Halls</option>
+                <option value="Maha Lingeshwara">Maha Lingeshwara</option>
+                <option value="Maha Nandeshwara">Maha Nandeshwara</option>
+              </select>
+            </div>
+            <div class="filter-item">
+              <label for="tallyFromDate">From Date:</label>
+              <input type="date" id="tallyFromDate">
+            </div>
+            <div class="filter-item">
+              <label for="tallyToDate">To Date:</label>
+              <input type="date" id="tallyToDate">
+            </div>
+          </div>
+          <div class="filter-row">
+            <div class="filter-item">
+              <label for="customerSelect">Select Customer:</label>
+              <select id="customerSelect">
+                <option value="">All Customers</option>
+              </select>
+            </div>
+          </div>
+          <div class="filter-row">
+            <div class="filter-item">
+              <label for="tallyMobile">Mobile:</label>
+              <input type="text" id="tallyMobile" readonly>
+            </div>
+            <div class="filter-item">
+              <label for="tallyAdvance">Advance (₹):</label>
+              <input type="number" id="tallyAdvance" readonly>
+            </div>
+            <div class="filter-item">
+              <label for="tallyLights">Lights Cost (₹):</label>
+              <input type="number" id="tallyLights" min="0" value="0">
+            </div>
+            <div class="filter-item">
+              <label for="tallyRemaining">Remaining (₹):</label>
+              <input type="number" id="tallyRemaining" min="0" value="0">
+            </div>
+          </div>
+          <div class="filter-row">
+            <button class="calculate-btn" onclick="calculateCustomerBill()">Calculate Bill</button>
+          </div>
+          <div id="customerBillResult" style="margin: 15px 0; font-weight: bold;"></div>
+          <button id="printCustomerBillBtn" class="print-btn" style="display:none;" onclick="printCustomerBill()">Print Bill</button>
+        </div>
+
+        <div class="tally-results" id="tallyResults" style="display: none;">
+          <div class="result-cards">
+            <div class="result-card">
+              <h4>Total Bookings</h4>
+              <span id="tallyTotalBookings">0</span>
+            </div>
+            <div class="result-card">
+              <h4>Total Advance</h4>
+              <span id="tallyTotalAdvance">₹0</span>
+            </div>
+            <div class="result-card">
+              <h4>Average Advance</h4>
+              <span id="tallyAvgAdvance">₹0</span>
+            </div>
+          </div>
+          
+          <div class="tally-table-container">
+            <table class="tally-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Mobile</th>
+                  <th>Hall</th>
+                  <th>Date</th>
+                  <th>Advance</th>
+                </tr>
+              </thead>
+              <tbody id="tallyTableBody"></tbody>
+            </table>
+          </div>
+          
+          <div class="tally-actions">
+            <button class="print-btn" onclick="printTallyReport()">🖨️ Print Report</button>
+            <button class="export-btn" onclick="exportTallyCSV()">📊 Export CSV</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Booking Modal -->
+  <div id="editBookingModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Booking</h2>
+        <span class="modal-close" onclick="closeEditModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="editBookingForm">
+          <input type="hidden" id="editBookingId">
+          <div class="form-group">
+            <label for="editHall">Hall:</label>
+            <select id="editHall" required>
+              <option value="Maha Lingeshwara">Maha Lingeshwara</option>
+              <option value="Maha Nandeshwara">Maha Nandeshwara</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editName">Customer Name:</label>
+            <input type="text" id="editName" required>
+          </div>
+          <div class="form-group">
+            <label for="editMobile">Mobile:</label>
+            <input type="tel" id="editMobile" required>
+          </div>
+          <div class="form-group">
+            <label for="editDate">Date:</label>
+            <input type="date" id="editDate" required>
+          </div>
+          <div class="form-group">
+            <label for="editAdvance">Advance Amount:</label>
+            <input type="number" id="editAdvance" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="editStatus">Status:</label>
+            <select id="editStatus" required>
+              <option value="booked">Booked</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="button" onclick="closeEditModal()">Cancel</button>
+            <button type="submit">Update Booking</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
+

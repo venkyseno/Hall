@@ -1,0 +1,36 @@
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="billing-page">
+  <h2>Bill Calculation</h2>
+  
+  <form id="billForm">
+    <div class="form-group">
+      <label for="customerSelect">Select Customer</label>
+      <select id="customerSelect" required>
+        <option value="">-- Select Customer --</option>
+      </select>
+    </div>
+
+    <div id="customerDetails" class="customer-details"></div>
+
+    <div class="form-group">
+      <label>Decoration Charges (₹)</label>
+      <input type="number" id="decoration" value="5000" min="0">
+    </div>
+
+    <div class="form-group">
+      <label>Catering Charges (₹)</label>
+      <input type="number" id="catering" value="10000" min="0">
+    </div>
+
+    <div class="total-amount">
+      Total: <span id="totalAmount">₹0</span>
+    </div>
+
+    <button type="button" id="printBill" class="print-btn">Print Bill</button>
+  </form>
+</div>
+
+<script src="billing.js"></script>
